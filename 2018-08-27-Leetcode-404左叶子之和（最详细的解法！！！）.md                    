@@ -1,0 +1,80 @@
+---
+layout: post
+title: Leetcode 404：左叶子之和（最详细的解法！！！）
+category : 算法
+tags : [python, c, c++]
+stickie: true
+date: 2018-08-27 00:00:00
+---
+
+计算给定二叉树的所有左叶子之和。
+
+**示例：**
+
+```
+    3
+   / \
+  9  20
+    /  \
+   15   7
+
+在这个二叉树中，有两个左叶子，分别是 9 和 15，所以返回 24
+```
+
+**解题思路**
+
+这里我们主要要解决的问题就是`什么是左叶子？`它满足这样的性质
+
+> node.left == True and node.left.left == None and node.left.right == None
+
+那么问题就和容易了。
+
+```python
+class Solution:
+    def sumOfLeftLeaves(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        result = 0
+        if not root:
+            return 0
+            
+        if root.left and root.left.left == None and root.left.right == None:
+            result += root.left.val
+
+        result += self.sumOfLeftLeaves(root.left) + self.sumOfLeftLeaves(root.right)
+        return result
+```
+
+同样，我们希望可以通过迭代的思路来解决这个问题。可以参照这个问题[Leetcode 112：路径总和（最详细的解法！！！）](https://blog.csdn.net/qq_17550379/article/details/82115520)的解题思路，通过前序遍历很容易就解决。
+
+```python
+class Solution:
+    def sumOfLeftLeaves(self, root):
+        """
+        :type root: TreeNode
+        :rtype: int
+        """
+        result = 0 
+        if not root:
+            return result
+
+        stack = [root]
+        while stack:
+            node = stack.pop()
+            if node.left and not node.left.left and not node.left.right:
+                result += node.left.val
+
+            if node.left:
+                stack.append(node.left)
+
+            if node.right:
+                stack.append(node.right)  
+
+        return result
+```
+
+**我将该问题的其他语言版本添加到了我的[GitHub Leetcode](https://github.com/luliyucoordinate/Leetcode)**
+
+**如有问题，希望大家指出！！！**
